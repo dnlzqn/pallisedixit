@@ -36,12 +36,18 @@ button {
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 100%;
+    border-radius: 50%;
     cursor: pointer;
     font-size: 50px;
     z-index: 1;
     height: 60px;
     width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none; /* Eliminar borde de enfoque en Safari */
+    -webkit-appearance: none; /* Asegurar apariencia en Safari */
+    -moz-appearance: none; /* Asegurar apariencia en Firefox */
 }
 
 button:hover {
