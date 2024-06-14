@@ -3,8 +3,7 @@ let Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
     Body = Matter.Body,
-    Events = Matter.Events,
-    Runner = Matter.Runner;
+    Events = Matter.Events;
 
 let engine;
 let world;
@@ -77,8 +76,8 @@ let messages = [
     "Jo sabia que tenia gos, però un home no."
 ];
 
-let remainingMessages = [...messages]; // Copia de la lista original
 let messageBodies = [];
+let displayedMessages = new Set();
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -98,21 +97,29 @@ function setup() {
     generateButton = select('#generate-button');
     generateButton.mousePressed(generateMessage);
 
-    // Usar Runner en lugar de Engine.run
-    let runner = Runner.create();
-    Runner.run(runner, engine);
+    Engine.run(engine);
 }
 
 function generateMessage() {
-    if (remainingMessages.length === 0) return;
+    if (displayedMessages.size === messages.length) {
+        generateButton.remove();
+        return;
+    }
 
-    let randomIndex = floor(random(remainingMessages.length));
+    let randomIndex;
+    do {
+        randomIndex = floor(random(messages.length));
+    } while (displayedMessages.has(randomIndex));
+
+    displayedMessages.add(randomIndex);
+
     let randomAngle = random(-PI / 8, PI / 8);
-    let message = remainingMessages.splice(randomIndex, 1)[0]; // Elimina el mensaje seleccionado
+    let message = messages[randomIndex];
     
-    // Calcular ancho y alto del texto
+    // Calcular ancho y alto del texto con padding constante
     textSize(20);
-    let textWidthValue = textWidth(message) + 20;
+    let padding = 20;
+    let textWidthValue = textWidth(message)*.9;
     let textHeight = 30;
 
     let body = Bodies.rectangle(random(width), 0, textWidthValue, textHeight, {
@@ -122,20 +129,17 @@ function generateMessage() {
 
     messageBodies.push({ body: body, text: message, width: textWidthValue, height: textHeight });
     World.add(world, body);
-
-    // Ocultar el botón si no hay más mensajes
-    if (remainingMessages.length === 0) {
-        generateButton.hide();
-    }
 }
 
 function draw() {
     background(240);
+
+    // Dibujar el parágrafo en las coordenadas x=10, y=10
     fill(0);
     textAlign(LEFT, TOP);
     textSize(32);
-    let s = "Pallisé dixit és una aplicació web que recull un bon grapat de dites populars pronunciades per un gentleman, arquitecte i professor montbanquí anomenat Antoni Pallisé.";
-    text(s, 10, 10, windowWidth - 20); // Coloca el texto en (10, 10) y adapta el ancho al canvas
+    let paragraph = "Pallisé dixit és una aplicació web que recull un bon grapat de dites populars pronunciades per un gentleman arquitecte i professor montbanquí anomenat Antoni Pallisé.";
+    text(paragraph, 10, 10, windowWidth - 20); // Ajustar el ancho al canvas
 
     textSize(16);
     // Dibujar todos los mensajes
