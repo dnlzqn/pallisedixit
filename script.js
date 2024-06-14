@@ -134,7 +134,7 @@ function draw() {
     fill(0);
     textAlign(LEFT, TOP);
     textSize(32);
-    let s = "Pallisé dixit és una aplicació web que recull un bon grapat de dites populars pronunciades per un gentleman arquitecte i professor montbanquí anomenat Antoni Pallisé.";
+    let s = "Pallisé dixit és una aplicació web que recull un bon grapat de dites populars pronunciades per un gentleman, arquitecte i professor montbanquí anomenat Antoni Pallisé.";
     text(s, 10, 10, windowWidth - 20); // Coloca el texto en (10, 10) y adapta el ancho al canvas
 
     textSize(16);
