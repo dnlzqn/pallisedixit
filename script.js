@@ -98,6 +98,7 @@ function setup() {
     generateButton.mousePressed(generateMessage);
 
     Engine.run(engine);
+    generateMessage();
 }
 
 function generateMessage() {
@@ -119,7 +120,7 @@ function generateMessage() {
     // Calcular ancho y alto del texto con padding constante
     textSize(20);
     let padding = 20;
-    let textWidthValue = textWidth(message)*.9;
+    let textWidthValue = textWidth(message) + padding * 2;
     let textHeight = 30;
 
     let body = Bodies.rectangle(random(width), 0, textWidthValue, textHeight, {
@@ -140,7 +141,6 @@ function draw() {
     textSize(32);
     let paragraph = "Pallisé dixit és una aplicació web que recull un bon grapat de dites populars pronunciades per un gentleman, arquitecte i professor montbanquí anomenat Antoni Pallisé.";
     text(paragraph, 10, 10, windowWidth - 20); // Ajustar el ancho al canvas
-
     textSize(16);
     // Dibujar todos los mensajes
     for (let messageBody of messageBodies) {
@@ -159,4 +159,20 @@ function draw() {
         text(messageBody.text, 0, 0);
         pop();
     }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    
+    // Actualizar posiciones de las paredes laterales y el suelo
+    Body.setPosition(leftWall, { x: 0, y: height / 2 });
+    Body.setPosition(rightWall, { x: width, y: height / 2 });
+    Body.setPosition(ground, { x: width / 2, y: height });
+    
+    Body.setVertices(leftWall, [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: height }, { x: 0, y: height }]);
+    Body.setVertices(rightWall, [{ x: width - 10, y: 0 }, { x: width, y: 0 }, { x: width, y: height }, { x: width - 10, y: height }]);
+    Body.setVertices(ground, [{ x: 0, y: height - 10 }, { x: width, y: height - 10 }, { x: width, y: height }, { x: 0, y: height }]);
+
+    // Ajustar el tamaño del parágrafo
+    select('#paragraph').style('width', `${windowWidth - 20}px`);
 }
